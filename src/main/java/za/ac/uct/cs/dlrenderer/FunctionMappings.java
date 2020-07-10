@@ -2,6 +2,7 @@ package za.ac.uct.cs.dlrenderer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +89,19 @@ public class FunctionMappings {
         }
     }  //Yes
 
-    private static String disjointClasses(Node<String> inputNode){
-        return objectIntersectionOf(inputNode) + " \u2261 \u22A5";
+    private static String disjointClasses(Node<String> inputNode) {
+        List<String> disjointClassesList = new ArrayList<>();
+        List<Node<String>> children = inputNode.getChildren();
+        for (int i = 0; i < children.size() - 1; i++) {
+            for (int j = i + 1; j < children.size(); j++) {
+                String disjointClasses = parenthesise(children.get(i))
+                        + " \u2293 "
+                        + parenthesise(children.get(j))
+                        + " \u2261 \u22A5";
+                disjointClassesList.add(disjointClasses);
+            }
+        }
+        return String.join("\n", disjointClassesList);
     }  //Yes
 
     private static String disjointUnion(Node<String> inputNode){

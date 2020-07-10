@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.GridLayout;
+import java.util.stream.Collectors;
 //import org.apache.log4j.Logger;
 import org.protege.editor.owl.model.selection.OWLSelectionModel;
 import org.protege.editor.owl.model.selection.OWLSelectionModelListener;
@@ -71,7 +72,9 @@ public class DLAxiomRenderer extends AbstractOWLViewComponent {
 			textArea.setText("");
 			for (OWLClassAxiom ax : curAxioms){ //for each axiom in current set of axioms
 				Node<String> root = owlToTree(String.valueOf(ax));
-				String output = treeToDL(root);
+				String output = Arrays.stream(treeToDL(root).split("\n"))
+						.filter(line -> line.contains(e.getIRI().getShortForm()))
+						.collect(Collectors.joining("\n"));
 
 				if (textArea.getText().equals("")){
 					textArea.append(output);
